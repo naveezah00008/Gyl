@@ -1,92 +1,60 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Video Player</title>
 
 <style>
-html, body {
+* {
     margin: 0;
     padding: 0;
-    min-height: 100%;
-    background: #050505;
-    font-family: Arial, sans-serif;
-    overflow-x: hidden;
-    color: #fff;
-}
-
-body:before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at top, #222 0%, #050505 60%);
-    z-index: -1;
-}
-
-#playerWrap {
-    position: relative;
-    width: 100%;
-    max-width: 950px;
-    margin: 20px auto;
-    padding: 10px;
     box-sizing: border-box;
 }
 
-video {
-    display: block;
-    width: 100%;
-    background: #000;
-    border-radius: 20px;
-    box-shadow:
-        0 0 30px rgba(255,0,0,.15),
-        0 0 80px rgba(0,0,0,.8);
+body {
+    background: #050505;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#playBtn {
+.player {
+    width: 100%;
+    max-width: 950px;
+    position: relative;
+}
+
+video {
+    width: 100%;
+    display: block;
+    background: #000;
+    border-radius: 20px;
+}
+
+.play-button {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: linear-gradient(135deg, #ff0000, #8b0000);
-    color: #fff;
+    padding: 15px 35px;
+    color: white;
+    background: linear-gradient(135deg, #ff0000, #990000);
     border: none;
-    padding: 16px 34px;
+    border-radius: 8px;
     font-size: 18px;
     font-weight: bold;
-    border-radius: 60px;
     cursor: pointer;
-    z-index: 10;
-    box-shadow: 0 0 25px rgba(255,0,0,.5);
 }
 
-#playBtn:hover {
-    transform: translate(-50%, -50%) scale(1.08);
-}
-
-#errorMsg {
-    display: none;
-    color: white;
-    text-align: center;
-    padding: 20px;
-    font-size: 14px;
-}
-
-@media(max-width:768px) {
-    #playerWrap {
-        padding: 0;
-        margin: 0;
+@media(max-width: 600px) {
+    .player {
+        width: 100%;
     }
 
     video {
         border-radius: 0;
-    }
-
-    #playBtn {
-        font-size: 15px;
-        padding: 14px 28px;
     }
 }
 </style>
@@ -94,74 +62,36 @@ video {
 
 <body>
 
-<div id="playerWrap">
+<div class="player">
 
-    <button id="playBtn" type="button">
-        ▶ PLAY VIDEO
-    </button>
-
-    <video
-        id="videoPlayer"
-        controls
-        playsinline
-        webkit-playsinline
-        preload="metadata">
+    <video id="videoPlayer" controls playsinline preload="metadata">
+        <source src="https://cdn.videy.co/V936179w1.mp4" type="video/mp4">
     </video>
 
-    <div id="errorMsg">
-        Video gagal dimuat. Periksa ID video.
-    </div>
+    <button class="play-button" id="playButton">PLAY VIDEO</button>
 
 </div>
 
 <script>
-const btn = document.getElementById('playBtn');
-const video = document.getElementById('videoPlayer');
-const errorMsg = document.getElementById('errorMsg');
+const video = document.getElementById("videoPlayer");
+const button = document.getElementById("playButton");
 
-const params = new URLSearchParams(window.location.search);
-const file = params.get('video');
-
-if (file && /^[a-zA-Z0-9_-]+$/.test(file)) {
-
-    video.src = 'https://cdn.videy.co/' + file + '.mp4';
-
-} else {
-
-    // Video default jika tidak ada parameter URL
-    video.src = 'https://cdn.videy.co/V936179w1.mp4';
-
-}
-
-video.addEventListener('error', function() {
-    errorMsg.style.display = 'block';
+button.addEventListener("click", function() {
+    video.play();
 });
 
-video.addEventListener('loadedmetadata', function() {
-    errorMsg.style.display = 'none';
+video.addEventListener("play", function() {
+    button.style.display = "none";
 });
 
-btn.addEventListener('click', async function() {
-    try {
-        await video.play();
-        btn.style.display = 'none';
-    } catch (error) {
-        errorMsg.style.display = 'block';
-    }
-});
-
-video.addEventListener('play', function() {
-    btn.style.display = 'none';
-});
-
-video.addEventListener('pause', function() {
+video.addEventListener("pause", function() {
     if (!video.ended) {
-        btn.style.display = 'block';
+        button.style.display = "block";
     }
 });
 
-video.addEventListener('ended', function() {
-    btn.style.display = 'block';
+video.addEventListener("ended", function() {
+    button.style.display = "block";
 });
 </script>
 
