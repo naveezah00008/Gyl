@@ -3,67 +3,60 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Video Player</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Videy Player</title>
 
 <style>
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html, body {
-    width: 100%;
-    height: 100%;
-    background: #000;
-    overflow: hidden;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
 }
 
-.player {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    height: 100vh;
-    height: 100dvh;
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 video {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: #000;
-    outline: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: black;
 }
 </style>
 </head>
 
 <body>
 
-<div class="player">
+<video
+  id="video"
+  src="https://cdn.videy.co/V936179w1.mp4"
+  controls
+  playsinline
+  webkit-playsinline
+  preload="auto">
+</video>
 
-    <video
-        id="videoPlayer"
-        controls
-        playsinline
-        webkit-playsinline
-        preload="metadata"
-    >
-        <source
-            src="https://cdn.videy.co/V936179w1.mp4"
-            type="video/mp4">
-        
-        Browser tidak mendukung video ini.
-    </video>
+<script>
+const video = document.getElementById("video");
 
-</div>
+video.addEventListener("error", function() {
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    '<div style="position:fixed;top:10px;left:10px;color:white;font:14px Arial">Gagal memuat video. Kode error: ' +
+    (video.error ? video.error.code : "tidak diketahui") +
+    '</div>'
+  );
+});
+</script>
 
 </body>
 </html>
